@@ -27,16 +27,17 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 
 //So in order to use this Google authentication, we need to first initialize a provider using this Google
-const provider = new GoogleAuthProvider();
+const googleProvider = new GoogleAuthProvider();
 
-provider.setCustomParameters({
+googleProvider.setCustomParameters({
   promt: "select_account",
 });
-//So these custom parameters will take some kind of configuration object.
-// And with it, we can tell different ways that we want this Google Auth provider to behave.
+// So these custom parameters will take some kind of configuration object.
+// And with it, we can tell different ways that we want this Google Auth googleProvider to behave.
 
 export const auth = getAuth();
-export const signInWithGooglePopup = () => signInWithPopup(auth, provider);
+export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
+export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
 
 //------ firestore
 const db = getFirestore();
