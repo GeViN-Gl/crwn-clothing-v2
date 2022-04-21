@@ -35,7 +35,7 @@ googleProvider.setCustomParameters({
 // So these custom parameters will take some kind of configuration object.
 // And with it, we can tell different ways that we want this Google Auth googleProvider to behave.
 
-export const auth = getAuth();
+export const auth = getAuth(firebaseApp);
 export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider);
 export const signInWithGoogleRedirect = () => signInWithRedirect(auth, googleProvider);
 
