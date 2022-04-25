@@ -6,6 +6,7 @@ import {
   signInWithRedirect,
   signInWithPopup,
   GoogleAuthProvider,
+  createUserWithEmailAndPassword,
 } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -48,21 +49,29 @@ const db = getFirestore();
  * Then if that user don`t exists in DB create one, else jest return referece to user cod in DB
  * @async must be await
  * @param {Object} userAuth - Object from google signIn methods
+ * @param {Object} additionalInformation - any user related info to add/replace in database user document,
+ *  like userName if there is no any
  *
  * @returns {Object} userDocRef - Reference to User related object in Firestore database
  */
-export const createUserDocumentFromAuth = async (userAuth) => {
+export const createUserDocumentFromAuth = async (
+  userAuth,
+  additionalInformation = {}
+) => {
+  //guard
+  if (!userAuth) return;
   const userDocRef = doc(db, "users", userAuth.uid); //(Database, collections, some ID)
+  // console.log(userDocRef);
 
-  console.log(userDocRef);
   const userSnapshot = await getDoc(userDocRef);
-  console.log(userSnapshot);
-  console.log(userSnapshot.exists());
+  console.log(
+    `${userSnapshot.exists() ? userSnapshot : "no user snapshot exist, creating now"}`
+  );
 
   if (!userSnapshot.exists()) {
     // if user data does not exists
     // create/set the document with the data from userAuth into my collection of users
-    const { displayName, email } = userAuth; //pull name email from user auth object (user auth comes from any of signIn methods)
+    const { displayName, email } = userAuth; //pull name email from user auth object (user auth comes from any of google signIn methods)
     const createdAt = new Date(); // to know when we got user
 
     try {
@@ -70,6 +79,7 @@ export const createUserDocumentFromAuth = async (userAuth) => {
         displayName,
         email,
         createdAt,
+        ...additionalInformation, //will overwrite any key:null from authWithEmailPassword
       });
     } catch (err) {
       console.error(`Error during creating the user ${err}`);
@@ -79,4 +89,17 @@ export const createUserDocumentFromAuth = async (userAuth) => {
   //if user data exists
   // return userDocRef
   return userDocRef;
+};
+
+// lect 97
+/** Create auth user with email, pass.
+ * In case of success also signin new user
+ * @param {string} email
+ * @param {string} password
+ */
+export const createAuthUserWithEmailAndPassword = async (email, password) => {
+  //guard
+  if (!email || !password) return;
+
+  return await createUserWithEmailAndPassword(auth, email, password);
 };
