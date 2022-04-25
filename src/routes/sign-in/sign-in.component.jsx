@@ -8,7 +8,7 @@ import {
   createUserDocumentFromAuth,
 } from "../../utils/firebase/firebase.utils";
 
-import SignUpForm from "../../sign-up-form/sign-up-form.component";
+import SignUpForm from "../../components/sign-up-form/sign-up-form.component";
 
 const SignIn = () => {
   // useEffect(() => {
@@ -26,6 +26,7 @@ const SignIn = () => {
 
   const logGoogleUser = async () => {
     const { user } = await signInWithGooglePopup(); //in all response we really need now only user
+    // eslint-disable-next-line 
     const userDocRef = await createUserDocumentFromAuth(user);
   };
 
