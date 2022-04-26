@@ -8,6 +8,8 @@ import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
 } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -65,9 +67,9 @@ export const createUserDocumentFromAuth = async (
   // console.log(userDocRef);
 
   const userSnapshot = await getDoc(userDocRef);
-  console.log(
-    `${userSnapshot.exists() ? userSnapshot : "no user snapshot exist, creating now"}`
-  );
+  // console.log(
+  //   `${userSnapshot.exists() ? userSnapshot : "no user snapshot exist, creating now"}`
+  // );
 
   if (!userSnapshot.exists()) {
     // if user data does not exists
@@ -111,3 +113,8 @@ export const signInAuthUserWithEmailAndPassword = async (email, password) => {
 
   return await signInWithEmailAndPassword(auth, email, password);
 };
+
+export const signOutUser = async () => await signOut(auth);
+
+export const onAuthStateChangedListener = (callback) =>
+  onAuthStateChanged(auth, callback);
