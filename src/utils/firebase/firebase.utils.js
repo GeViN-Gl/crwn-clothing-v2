@@ -1,6 +1,7 @@
 //----------------- AUTH ----------------------
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+
 import {
   getAuth,
   // signInWithRedirect,
@@ -63,6 +64,8 @@ export const createUserDocumentFromAuth = async (
 ) => {
   //guard
   if (!userAuth) return;
+
+  
   const userDocRef = doc(db, "users", userAuth.uid); //(Database, collections, some ID)
   // console.log(userDocRef);
 
