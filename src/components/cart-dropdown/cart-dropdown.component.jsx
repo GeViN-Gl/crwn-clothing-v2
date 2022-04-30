@@ -12,7 +12,7 @@ const CartDropdown = () => {
   const { cartItems } = useContext(CartContext);
 
   let navigate = useNavigate();
-  const navigateToCheckOut = () => {
+  const goToCheckoutHandler = () => {
     navigate(`/checkout`);
   };
 
@@ -23,7 +23,7 @@ const CartDropdown = () => {
           return <CartItem key={item.id} cartItem={item} />;
         })}
       </div>
-      <Button onClick={navigateToCheckOut}>GO TO CHECKOUT</Button>
+      <Button onClick={goToCheckoutHandler}>GO TO CHECKOUT</Button>
     </div>
   );
 };
