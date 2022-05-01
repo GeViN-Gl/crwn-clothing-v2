@@ -16,7 +16,16 @@ import {
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 //----------------- FIRESTORE ----------------------
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  writeBatch,
+  query,
+  getDocs,
+} from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -47,6 +56,64 @@ export const signInWithGooglePopup = () => signInWithPopup(auth, googleProvider)
 //------ firestore
 const db = getFirestore();
 
+// There be a method to upload some JSON object to firestorm DB
+export const addCollectionAndDocuments = async (collectionKey, objectsToAdd) => {
+  const collectionRef = collection(db, collectionKey);
+  const batch = writeBatch(db);
+
+  objectsToAdd.forEach((object) => {
+    const docRef = doc(collectionRef, object.title.toLowerCase());
+    console.dir(`docRef ${docRef}`);
+    batch.set(docRef, object);
+  });
+
+  await batch.commit();
+  console.log(`Done`);
+};
+
+export const getCategoriesAndDocuments = async () => {
+  const collectionRef = collection(db, "categories"); //categories hardocoded because we created collection with this name
+  // console.log("collectionsRef");
+  // console.dir(collectionRef);
+
+  const q = query(collectionRef); // Generate a query off of this collectionRef
+  // from it we get an object, and from it we can generate a snapsot
+
+  const querySnapshot = await getDocs(q); //getDoc is the async method to fetch those document snapshot
+  // console.log("querySnapshot");
+  // console.dir(querySnapshot);
+  // From here we can access different document in snapshot
+
+  //querySnapshot.docs //will give us back array of all documents inside the snapshot
+
+  /*Next there is magic reduce to create map and bring data back to JSON-like object
+  what we want to acquire
+  {
+    hats: {
+      title: 'hats',
+      items: [
+        {},
+        {}
+      ]
+    },
+    {
+      .....
+    }
+  }
+
+  to do so use ES6 magic to access key value of object through 
+  objName[keyName]=value
+
+  
+  */
+  const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) => {
+    const { title, items } = docSnapshot.data(); // destructure only what we need
+    acc[title.toLowerCase()] = items;
+    return acc;
+  }, {});
+  return categoryMap;
+};
+
 /** And what this method is, is it's an async function that receives some user authentication object because
  * that's really what we're getting back anyways from our Firebase authentication or Google sign in.
  *
@@ -65,7 +132,6 @@ export const createUserDocumentFromAuth = async (
   //guard
   if (!userAuth) return;
 
-  
   const userDocRef = doc(db, "users", userAuth.uid); //(Database, collections, some ID)
   // console.log(userDocRef);
 

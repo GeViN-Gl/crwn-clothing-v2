@@ -1,0 +1,13 @@
+.category-header {
+  font-size: 36px;
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 25px;
+}
+
+.category-container-a {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  row-gap: 50px;
+  column-gap: 25px;
+}
