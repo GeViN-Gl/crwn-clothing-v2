@@ -1,9 +1,4 @@
-import {
-  CheckoutContainer,
-  CheckoutHeader,
-  HeaderBlock,
-  Total,
-} from "./checkout.styles.jsx";
+import { CheckoutContainer, CheckoutHeader, HeaderBlock, Total } from "./checkout.styles";
 
 import { useContext } from "react";
 
