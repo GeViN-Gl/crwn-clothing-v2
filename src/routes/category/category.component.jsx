@@ -3,7 +3,7 @@ import { useContext, useState, useEffect, Fragment } from "react";
 
 import { CategotiesContext } from "../../context/categories.context";
 import ProductCard from "../../components/product-card/product-card.component";
-import "./category.styles.scss";
+import { Header, CategoryContainer } from "./category.styles";
 
 const Category = () => {
   const { category } = useParams();
@@ -18,14 +18,14 @@ const Category = () => {
   // console.dir(products);
   return (
     <Fragment>
-      <h2 className="category-header">{category.toUpperCase()}</h2>
-      <div className="category-container-a">
+      <Header>{category.toUpperCase()}</Header>
+      <CategoryContainer>
         {
           /*Add guard as categories map must be awaited*/
           products &&
             products.map((product) => <ProductCard key={product.id} product={product} />)
         }
-      </div>
+      </CategoryContainer>
     </Fragment>
   );
 };

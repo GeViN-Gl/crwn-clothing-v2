@@ -1,6 +1,6 @@
 // import { useEffect } from "react";
 // import { getRedirectResult } from "firebase/auth";
-import "./authentication.styles.scss";
+import { AuthenticationConstainer } from "./authentication.styles";
 
 // import {
 //   // auth,
@@ -28,10 +28,10 @@ const Authentication = () => {
   /* <button onClick={signInWithGoogleRedirect}>Sign in with Google Redirect</button> */
 
   return (
-    <div className="authentication-constainer">
+    <AuthenticationConstainer>
       <SignInForm />
       <SignUpForm />
-    </div>
+    </AuthenticationConstainer>
   );
 };
 
